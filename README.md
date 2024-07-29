@@ -6,6 +6,12 @@
 
 ### Patch for maxOS:
 	sed -i 's/\(__atomic_compare_exchange\)/\1_db/' src/dbinc/atomic.h
-	sed -i 's/\(atomic_read\)/\1_db/' src/dbinc/atomic.h
-	sed -i 's/\(atomic_init\)/\1_db/' src/dbinc/atomic.h
 
+    vi src/dbinc/atomic.h
+
+    line 73:
+    #define	atomic_init(p, val)	((p)->value = (val))
+
+    #if !defined(__cplusplus)
+    #define	atomic_init(p, val)	((p)->value = (val))
+    #endif
