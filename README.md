@@ -12,7 +12,7 @@
     line 73:
     #define	atomic_init(p, val)	((p)->value = (val))
 
-    change to"
+    change to:
     #if !defined(__cplusplus)
     #define	atomic_init(p, val)	((p)->value = (val))
     #endif
