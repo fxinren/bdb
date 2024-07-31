@@ -1,5 +1,6 @@
 # BerkeleyDB 5.3.28 
-	from https://github.com/berkeleydb/libdb/releases/tag/v5.3.28
+    from https://github.com/berkeleydb/libdb/releases/tag/v5.3.28
+    Final patch release of the 5.x series, last release before the license was changed to AGPLv3.
 
 ### Patch for Linux:
 	sed -i 's/\(__atomic_compare_exchange\)/\1_db/' src/dbinc/atomic.h
@@ -29,3 +30,26 @@
     19148 template <typename T>class TLSClass {
     19149               public: static  $ax_tls_decl_keyword  T *tlsvar;
     19150               };
+
+### Patch for Windows (VS2022):
+    1. vi src/dbinc/atomic.h
+    line 73:
+    #define	atomic_init(p, val)	((p)->value = (val))
+
+    change to:
+    #if !defined(__cplusplus)
+    #define	atomic_init(p, val)	((p)->value = (val))
+    #endif
+
+    2. vi ./build_windows/db.h
+    line 2816:
+    #define        store(a, b)     __db_dbm_store(a, b)
+
+    change to:
+    #if !defined(__cplusplus)
+    #define        store(a, b)     __db_dbm_store(a, b)
+    #endif
+
+    3. vi ./src/dbinc/win_db.h
+    line 36, intert:
+    #include <stdint.h>
